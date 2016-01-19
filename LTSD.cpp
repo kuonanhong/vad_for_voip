@@ -14,6 +14,7 @@
 LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double lambda0, double lambda1){
 	windowsize = winsize;
 	fftsize = winsize / 2;
+	freqsize = fftsize / 2.5;
 	samplingrate = samprate;
 	m_order = order;
 	m_e0 = e0;
@@ -134,18 +135,18 @@ bool LTSD::isSignal(){
 double LTSD::calcPower(){
 	double* amp = amp_history.at(amp_history.size() - 1);
 	double sum = 0.0;
-	for(int i = 0; i < fftsize; i++){
+	for(int i = 0; i < freqsize; i++){
 		sum += amp[i] * amp[i];
 	}
-	return 10 * log10((sum / fftsize) / ((1.0e-5 * 2.0) * (1.0e-5 * 2.0)));
+	return 10 * log10((sum / freqsize) / ((1.0e-5 * 2.0) * (1.0e-5 * 2.0)));
 }
 
 double LTSD::calcNoisePower(){
     double s = 0.0;
-    for(int i = 0; i < fftsize; i++){
+    for(int i = 0; i < freqsize; i++){
         s += noise_profile[i];
     }
-    return 10 * log10((s / fftsize) / ((1.0e-5 * 2.0) * (1.0e-5 * 2.0)));
+    return 10 * log10((s / freqsize) / ((1.0e-5 * 2.0) * (1.0e-5 * 2.0)));
 }
 
 char* LTSD::getSignal(){
@@ -162,28 +163,28 @@ char* LTSD::getSignal(){
 void LTSD::calcLTSE(){
 	int i = 0;
 	double amp;
-	for(i=0;i < fftsize; i++){
+	for(i=0;i < freqsize; i++){
 		ltse[i] = 0.0;
 	}
 	for (std::deque<double*>::iterator ita = amp_history.begin(); ita != amp_history.end(); ita++){
-		for(i=0;i < fftsize; i++){
+		for(i=0;i < freqsize; i++){
 			amp = (*ita)[i];
 			if (ltse[i] < amp){
 				ltse[i] = amp;
 			}
 		}
 	}
-	for(i=0;i < fftsize; i++){
+	for(i=0;i < freqsize; i++){
 		ltse[i] = ltse[i] * ltse[i];
 	}
 }
 
 double LTSD::calcLTSD(){
 	double sum = 0.0;
-	for(int i = 0; i < fftsize; i++){
+	for(int i = 0; i < freqsize; i++){
 		sum += ltse[i] / noise_profile[i];
 	}
-	return 10 * log10(sum / fftsize);
+	return 10 * log10(sum / freqsize);
 }
 
 void LTSD::createNoiseProfile(){

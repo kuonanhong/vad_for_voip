@@ -40,6 +40,7 @@ private:
 	double calcNoisePower();
 	int windowsize;
 	int fftsize;
+	int freqsize;
 	int samplingrate;
 	int m_order;
 	double m_e0;
