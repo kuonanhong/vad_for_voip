@@ -7,11 +7,11 @@
 
 #include "LTSD.h"
 
-#include <android/log.h>
-#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_VERBOSE, "vaddsp-jni", __VA_ARGS__))
+//#include <android/log.h>
+//#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_VERBOSE, "vaddsp-jni", __VA_ARGS__))
 
 
-LTSD::LTSD(int winsize, int samprate, int order, float e0, float e1, float lambda0, float lambda1){
+LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double lambda0, double lambda1){
 	windowsize = winsize;
 	fftsize = winsize / 2 + 1;
 	freqsize = fftsize / 2.5;
@@ -32,7 +32,6 @@ LTSD::LTSD(int winsize, int samprate, int order, float e0, float e1, float lambd
 	createWindow();
     context = CkFftInit(windowsize, kCkFftDirection_Both, NULL, NULL);
     forwardOutput = new CkFftComplex[windowsize/2 + 1];
-
     
     mmse = NULL;
 }
@@ -68,8 +67,8 @@ bool LTSD::process(char *input){
 	float *amp = new float[fftsize];
 	for(int i=0; i<fftsize; i++) {
       if (forwardOutput != NULL){
-        amp[i] = sqrtf(powf(forwardOutput[i].real, 2.0) + powf(forwardOutput[i].imag, 2));
-		}
+        amp[i] = sqrtf(powf(forwardOutput[i].real, 2.0) + powf(forwardOutput[i].imag, 2)) + 0.00001;
+	  }
 	}
 
 	short* sig = new short[windowsize];
@@ -108,7 +107,7 @@ bool LTSD::isSignal(){
     float lamb = (m_lambda0 - m_lambda1) / (m_e0 - m_e1) * e2 + m_lambda0 -
                   (m_lambda0 - m_lambda1) / (1.0 - (m_e1 / m_e0));
 
-    LOGE("signal: %f, noise: %f, ltsd: %f, lambda:%f, e0:%f", e, e2, ltsd, lamb, m_e0);
+    //LOGE("signal: %f, noise: %f, ltsd: %f, lambda:%f, e0:%f", e, e2, ltsd, lamb, m_e0);
 
 
 	if (e2 < m_e0){
@@ -138,15 +137,15 @@ float LTSD::calcPower(){
 	for(int i = 0; i < freqsize; i++){
 		sum += amp[i] * amp[i];
 	}
-	return 10 * log10((sum / freqsize) / ((1.0e-5 * 2.0) * (1.0e-5 * 2.0)));
+	return 10 * log10f((sum / float(freqsize)) / ((1.0e-5 * 2.0) * (1.0e-5 * 2.0)));
 }
 
 float LTSD::calcNoisePower(){
     float s = 0.0;
-    for(int i = 0; i < freqsize; i++){
+    for(int i = 0; i < freqsize; i++) {
         s += noise_profile[i];
     }
-    return 10 * log10((s / freqsize) / ((1.0e-5 * 2.0) * (1.0e-5 * 2.0)));
+    return 10 * log10f((s / float(freqsize)) / ((1.0e-5 * 2.0) * (1.0e-5 * 2.0)));
 }
 
 char* LTSD::getSignal(){
@@ -193,7 +192,7 @@ void LTSD::createNoiseProfile(){
 	for (std::deque<float*>::iterator ita = amp_history.begin(); ita != amp_history.end(); ita++){
         float *x = (*ita);
 		for(i=0;i < fftsize; i++){
-			noise_profile[i] += x[i] + 0.01;
+			noise_profile[i] += x[i];
 		}
 	}
     float sum = 0.0;
@@ -215,7 +214,7 @@ void LTSD::createWindow(){
 	}
 }
 
-void LTSD::updateParams(float e0, float e1, float lambda0, float lambda1){
+void LTSD::updateParams(double e0, double e1, double lambda0, double lambda1){
  	m_e0 = e0;
 	m_e1 = e1;
 	m_lambda0 = lambda0;

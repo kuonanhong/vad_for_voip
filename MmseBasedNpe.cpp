@@ -7,6 +7,9 @@
 
 #include <MmseBasedNpe.h>
 
+#include "LTSD.h"
+
+
 MmseBasedNpe::MmseBasedNpe(int size, float *noiseProfile) {
 	// TODO Auto-generated constructor stub
 	fftsize = size;
@@ -17,7 +20,7 @@ MmseBasedNpe::MmseBasedNpe(int size, float *noiseProfile) {
 	priorFact = q / (1 - q);
 	xiOptDb = 15.0; // optimal fixed a priori SNR for SPP estimation
 	xiOpt = powf(10.0, (xiOptDb / 10.0));
-	logGLRFact = log(1.0 / (1.0 + xiOpt));
+	logGLRFact = logf(1.0 / (1.0 + xiOpt));
 	GLRexp = xiOpt / (1.0 + xiOpt);
 
 	PH1mean = makeVector(fftsize, (float)0.5);
@@ -45,24 +48,27 @@ MmseBasedNpe::~MmseBasedNpe() {
 void MmseBasedNpe::process(float* amp) {
 	int i = 0;
 	float tmp;
-	for(i = 0; i< fftsize; i++){
-		noisyPer[i] = amp[i] * amp[i];
-		snrPost1[i] = noisyPer[i] / noisePow[i];
+	for(i = 0; i< fftsize; i++) {
+        noisyPer[i] = amp[i] * amp[i];
+        snrPost1[i] = noisyPer[i] / noisePow[i];
 
-		tmp = logGLRFact + GLRexp *snrPost1[i];
-		if(tmp > 200.0){
-			tmp = 200.0;
-		}
-		GLR[i] = priorFact * exp(tmp);
-		PH1[i] = GLR[i] / (1.0 + GLR[i]);
-		PH1mean[i] = alphaPH1mean * PH1mean[i] + (1.0-alphaPH1mean) * PH1[i];
-		if(PH1mean[i] > 0.99){
-			if (PH1[i] > 0.99){
-				PH1[i] = 0.99;
-			}
-		}
-		estimate[i] = PH1[i] * noisePow[i] + (1.0 - alphaPSD) * noisyPer[i];
-		noisePow[i] = alphaPSD *noisePow[i] + (1.0 - alphaPSD) * estimate[i];
+        tmp = logGLRFact + GLRexp * snrPost1[i];
+        if (tmp > 200.0) {
+            tmp = 200.0;
+        }
+        GLR[i] = priorFact * expf(tmp);
+        PH1[i] = GLR[i] / (1.0 + GLR[i]);
+        PH1mean[i] = alphaPH1mean * PH1mean[i] + (1.0 - alphaPH1mean) * PH1[i];
+        if (PH1mean[i] > 0.99) {
+            if (PH1[i] > 0.99) {
+                PH1[i] = 0.99;
+            }
+        }
+        estimate[i] = PH1[i] * noisePow[i] + (1.0 - alphaPSD) * noisyPer[i];
+        noisePow[i] = alphaPSD * noisePow[i] + (1.0 - alphaPSD) * estimate[i];
+        if (std::isnan(noisePow[i])) {
+            noisePow[i] = 0.0000001;
+        }
 	}
 }
 
