@@ -1,0 +1,295 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AA201DCC164C00170051D5DD /* ckfft.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA201DBA164C00170051D5DD /* ckfft.cpp */; };
+		AA201DCD164C00170051D5DD /* context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA201DBB164C00170051D5DD /* context.cpp */; };
+		AA201DCE164C00170051D5DD /* fft_default.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA201DBE164C00170051D5DD /* fft_default.cpp */; };
+		AA201DCF164C00170051D5DD /* fft_neon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA201DC0164C00170051D5DD /* fft_neon.cpp */; };
+		AA201DD0164C00170051D5DD /* fft_real_default.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA201DC2164C00170051D5DD /* fft_real_default.cpp */; };
+		AA201DD1164C00170051D5DD /* fft_real_neon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA201DC4164C00170051D5DD /* fft_real_neon.cpp */; };
+		AA201DD2164C00170051D5DD /* fft_real.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA201DC6164C00170051D5DD /* fft_real.cpp */; };
+		AA201DD3164C00170051D5DD /* fft.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA201DC8164C00170051D5DD /* fft.cpp */; };
+		AA3A95A51656AA2C00448310 /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA3A95A41656AA2C00448310 /* debug.cpp */; };
+		AA75B5BF15EC62B5008151B6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA75B5BE15EC62B5008151B6 /* Foundation.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		AA75B5B915EC62B5008151B6 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		AA04D3EC163F11F100878E08 /* ckfft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ckfft.h; path = ../../../inc/ckfft/ckfft.h; sourceTree = "<group>"; };
+		AA201DBA164C00170051D5DD /* ckfft.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ckfft.cpp; path = ../ckfft.cpp; sourceTree = "<group>"; };
+		AA201DBB164C00170051D5DD /* context.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = context.cpp; path = ../context.cpp; sourceTree = "<group>"; };
+		AA201DBC164C00170051D5DD /* context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = context.h; path = ../context.h; sourceTree = "<group>"; };
+		AA201DBD164C00170051D5DD /* debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = debug.h; path = ../debug.h; sourceTree = "<group>"; };
+		AA201DBE164C00170051D5DD /* fft_default.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fft_default.cpp; path = ../fft_default.cpp; sourceTree = "<group>"; };
+		AA201DBF164C00170051D5DD /* fft_default.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fft_default.h; path = ../fft_default.h; sourceTree = "<group>"; };
+		AA201DC0164C00170051D5DD /* fft_neon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fft_neon.cpp; path = ../fft_neon.cpp; sourceTree = "<group>"; };
+		AA201DC1164C00170051D5DD /* fft_neon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fft_neon.h; path = ../fft_neon.h; sourceTree = "<group>"; };
+		AA201DC2164C00170051D5DD /* fft_real_default.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fft_real_default.cpp; path = ../fft_real_default.cpp; sourceTree = "<group>"; };
+		AA201DC3164C00170051D5DD /* fft_real_default.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fft_real_default.h; path = ../fft_real_default.h; sourceTree = "<group>"; };
+		AA201DC4164C00170051D5DD /* fft_real_neon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fft_real_neon.cpp; path = ../fft_real_neon.cpp; sourceTree = "<group>"; };
+		AA201DC5164C00170051D5DD /* fft_real_neon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fft_real_neon.h; path = ../fft_real_neon.h; sourceTree = "<group>"; };
+		AA201DC6164C00170051D5DD /* fft_real.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fft_real.cpp; path = ../fft_real.cpp; sourceTree = "<group>"; };
+		AA201DC7164C00170051D5DD /* fft_real.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fft_real.h; path = ../fft_real.h; sourceTree = "<group>"; };
+		AA201DC8164C00170051D5DD /* fft.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fft.cpp; path = ../fft.cpp; sourceTree = "<group>"; };
+		AA201DC9164C00170051D5DD /* fft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fft.h; path = ../fft.h; sourceTree = "<group>"; };
+		AA201DCA164C00170051D5DD /* math_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = math_util.h; path = ../math_util.h; sourceTree = "<group>"; };
+		AA201DCB164C00170051D5DD /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = platform.h; path = ../platform.h; sourceTree = "<group>"; };
+		AA3A95A41656AA2C00448310 /* debug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = debug.cpp; path = ../debug.cpp; sourceTree = "<group>"; };
+		AA75B5BB15EC62B5008151B6 /* libckfft_ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libckfft_ios.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA75B5BE15EC62B5008151B6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AA75B5B815EC62B5008151B6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA75B5BF15EC62B5008151B6 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AA75B5B015EC62B5008151B6 = {
+			isa = PBXGroup;
+			children = (
+				AA201DBA164C00170051D5DD /* ckfft.cpp */,
+				AA04D3EC163F11F100878E08 /* ckfft.h */,
+				AA201DBB164C00170051D5DD /* context.cpp */,
+				AA201DBC164C00170051D5DD /* context.h */,
+				AA3A95A41656AA2C00448310 /* debug.cpp */,
+				AA201DBD164C00170051D5DD /* debug.h */,
+				AA201DC8164C00170051D5DD /* fft.cpp */,
+				AA201DC9164C00170051D5DD /* fft.h */,
+				AA201DBE164C00170051D5DD /* fft_default.cpp */,
+				AA201DBF164C00170051D5DD /* fft_default.h */,
+				AA201DC0164C00170051D5DD /* fft_neon.cpp */,
+				AA201DC1164C00170051D5DD /* fft_neon.h */,
+				AA201DC6164C00170051D5DD /* fft_real.cpp */,
+				AA201DC7164C00170051D5DD /* fft_real.h */,
+				AA201DC2164C00170051D5DD /* fft_real_default.cpp */,
+				AA201DC3164C00170051D5DD /* fft_real_default.h */,
+				AA201DC4164C00170051D5DD /* fft_real_neon.cpp */,
+				AA201DC5164C00170051D5DD /* fft_real_neon.h */,
+				AA201DCA164C00170051D5DD /* math_util.h */,
+				AA201DCB164C00170051D5DD /* platform.h */,
+				AA75B5BD15EC62B5008151B6 /* Frameworks */,
+				AA75B5BC15EC62B5008151B6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AA75B5BC15EC62B5008151B6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AA75B5BB15EC62B5008151B6 /* libckfft_ios.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AA75B5BD15EC62B5008151B6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AA75B5BE15EC62B5008151B6 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AA75B5BA15EC62B5008151B6 /* ckfft_ios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA75B5C915EC62B5008151B6 /* Build configuration list for PBXNativeTarget "ckfft_ios" */;
+			buildPhases = (
+				AA75B5B715EC62B5008151B6 /* Sources */,
+				AA75B5B815EC62B5008151B6 /* Frameworks */,
+				AA75B5B915EC62B5008151B6 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ckfft_ios;
+			productName = ckfft_ios;
+			productReference = AA75B5BB15EC62B5008151B6 /* libckfft_ios.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AA75B5B215EC62B5008151B6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = "Cricket Technology";
+			};
+			buildConfigurationList = AA75B5B515EC62B5008151B6 /* Build configuration list for PBXProject "ckfft_ios" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = AA75B5B015EC62B5008151B6;
+			productRefGroup = AA75B5BC15EC62B5008151B6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AA75B5BA15EC62B5008151B6 /* ckfft_ios */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AA75B5B715EC62B5008151B6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA201DCC164C00170051D5DD /* ckfft.cpp in Sources */,
+				AA201DCD164C00170051D5DD /* context.cpp in Sources */,
+				AA201DCE164C00170051D5DD /* fft_default.cpp in Sources */,
+				AA201DCF164C00170051D5DD /* fft_neon.cpp in Sources */,
+				AA201DD0164C00170051D5DD /* fft_real_default.cpp in Sources */,
+				AA201DD1164C00170051D5DD /* fft_real_neon.cpp in Sources */,
+				AA201DD2164C00170051D5DD /* fft_real.cpp in Sources */,
+				AA201DD3164C00170051D5DD /* fft.cpp in Sources */,
+				AA3A95A51656AA2C00448310 /* debug.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		AA75B5C715EC62B5008151B6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		AA75B5C815EC62B5008151B6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AA75B5CA15EC62B5008151B6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/ckfft_ios.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				HEADER_SEARCH_PATHS = (
+					../../../inc,
+					../../../src,
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		AA75B5CB15EC62B5008151B6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/ckfft_ios.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "NDEBUG=1";
+				HEADER_SEARCH_PATHS = (
+					../../../inc,
+					../../../src,
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AA75B5B515EC62B5008151B6 /* Build configuration list for PBXProject "ckfft_ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA75B5C715EC62B5008151B6 /* Debug */,
+				AA75B5C815EC62B5008151B6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA75B5C915EC62B5008151B6 /* Build configuration list for PBXNativeTarget "ckfft_ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA75B5CA15EC62B5008151B6 /* Debug */,
+				AA75B5CB15EC62B5008151B6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AA75B5B215EC62B5008151B6 /* Project object */;
+}

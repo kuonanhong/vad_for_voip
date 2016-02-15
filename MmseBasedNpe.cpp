@@ -1,5 +1,5 @@
 /*
- * MmseBasedNpe.cpp
+ * Mmsebasednpe.cpp
  *
  *  Created on: 2015/11/27
  *      Author: aihara
@@ -7,7 +7,7 @@
 
 #include <MmseBasedNpe.h>
 
-MmseBasedNpe::MmseBasedNpe(int size, double *noiseProfile) {
+MmseBasedNpe::MmseBasedNpe(int size, float *noiseProfile) {
 	// TODO Auto-generated constructor stub
 	fftsize = size;
 	alphaPH1mean = 0.9;
@@ -16,18 +16,18 @@ MmseBasedNpe::MmseBasedNpe(int size, double *noiseProfile) {
 	q = 0.5; // a priori probability of speech presence:
 	priorFact = q / (1 - q);
 	xiOptDb = 15.0; // optimal fixed a priori SNR for SPP estimation
-	xiOpt = pow(10.0, (xiOptDb / 10.0));
+	xiOpt = powf(10.0, (xiOptDb / 10.0));
 	logGLRFact = log(1.0 / (1.0 + xiOpt));
 	GLRexp = xiOpt / (1.0 + xiOpt);
 
-	PH1mean = makeVector(fftsize, 0.5);
-	noisePow = new double[fftsize];
-	memcpy(noisePow, noiseProfile, sizeof(double) * fftsize);
-	noisyPer = new double[fftsize];
-	snrPost1 = new double[fftsize];
-	estimate = new double[fftsize];
-	GLR = new double[fftsize];
-	PH1 = new double[fftsize];
+	PH1mean = makeVector(fftsize, (float)0.5);
+	noisePow = new float[fftsize];
+	memcpy(noisePow, noiseProfile, sizeof(float) * fftsize);
+	noisyPer = new float[fftsize];
+	snrPost1 = new float[fftsize];
+	estimate = new float[fftsize];
+	GLR = new float[fftsize];
+	PH1 = new float[fftsize];
 }
 
 MmseBasedNpe::~MmseBasedNpe() {
@@ -42,9 +42,9 @@ MmseBasedNpe::~MmseBasedNpe() {
 }
 
 
-void MmseBasedNpe::process(double* amp) {
+void MmseBasedNpe::process(float* amp) {
 	int i = 0;
-	double tmp;
+	float tmp;
 	for(i = 0; i< fftsize; i++){
 		noisyPer[i] = amp[i] * amp[i];
 		snrPost1[i] = noisyPer[i] / noisePow[i];
@@ -62,11 +62,11 @@ void MmseBasedNpe::process(double* amp) {
 			}
 		}
 		estimate[i] = PH1[i] * noisePow[i] + (1.0 - alphaPSD) * noisyPer[i];
-		noisePow[i] = alphaPSD *noisePow[i] + (1.0 - alphaPSD)*estimate[i];
+		noisePow[i] = alphaPSD *noisePow[i] + (1.0 - alphaPSD) * estimate[i];
 	}
 }
 
-void MmseBasedNpe::updateNoiseProfile(double *noise){
-	memcpy(noise, noisePow, sizeof(double) * fftsize);
+void MmseBasedNpe::updateNoiseProfile(float *noise){
+	memcpy(noise, noisePow, sizeof(float) * fftsize);
 }
 

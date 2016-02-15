@@ -14,28 +14,28 @@
 
 class MmseBasedNpe {
 public:
-	MmseBasedNpe(int size, double *noiseProfile);
+	MmseBasedNpe(int size, float *noiseProfile);
 	virtual ~MmseBasedNpe();
-	void process(double *amp);
-	void updateNoiseProfile(double *noise);
+	void process(float *amp);
+	void updateNoiseProfile(float *noise);
 private:
 	int fftsize;
-	double* PH1mean;
-	double alphaPH1mean;
-	double alphaPSD;
-	double q;
-	double priorFact;
-	double xiOptDb;
-	double xiOpt;
-	double logGLRFact;
-	double GLRexp;
+	float* PH1mean;
+	float alphaPH1mean;
+	float alphaPSD;
+	float q;
+	float priorFact;
+	float xiOptDb;
+	float xiOpt;
+	float logGLRFact;
+	float GLRexp;
 
-	double* noisePow;
-	double* noisyPer;
-	double* snrPost1;
-	double* estimate;
-	double* GLR;
-	double* PH1;
+	float* noisePow;
+	float* noisyPer;
+	float* snrPost1;
+	float* estimate;
+	float* GLR;
+	float* PH1;
 
 };
 
