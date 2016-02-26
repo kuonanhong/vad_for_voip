@@ -31,6 +31,7 @@ public:
 	bool process(char *input);
 	char* getSignal(); // 取得したsignalは必ず利用後deleteすること。byteで返しているが、アーキテクチャのエンディアンでのshort型の配列になっている
     void updateParams(double e0, double e1, double lambda0, double lambda1);
+	int fftErrors();
 private:
 	void createWindow();
 	void calcLTSE();
@@ -60,7 +61,8 @@ private:
 
     CkFftContext* context;
     CkFftComplex* forwardOutput;
-    
+
+	int fft_errors;
 };
 
 #endif /* LTSD_H_ */

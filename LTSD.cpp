@@ -19,6 +19,7 @@ LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double la
 	m_order = order;
 	m_e0 = e0;
 	m_e1 = e1;
+	fft_errors = 0;
 	m_lambda0 = lambda0;
 	m_lambda1 = lambda1;
 	fft_in = new float[windowsize];
@@ -70,6 +71,7 @@ bool LTSD::process(char *input){
         amp[i] = sqrtf(powf(forwardOutput[i].real, 2.0) + powf(forwardOutput[i].imag, 2.0)) + 0.000001;
 		  if (std::isnan(amp[i]) || std::isinf(amp[i])){
 			  amp[i] = 0.000001;
+			  fft_errors++;
 		  }
 	  }
 	}
@@ -224,3 +226,6 @@ void LTSD::updateParams(double e0, double e1, double lambda0, double lambda1){
 	m_lambda1 = lambda1; 
 }
 
+int LTSD::fftErrors() {
+	return fft_errors;
+}
