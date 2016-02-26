@@ -50,7 +50,7 @@ LTSD::~LTSD() {
 	delete[] ltse;
 	delete[] noise_profile;
     CkFftShutdown(context);
-    
+
 	if (mmse != NULL){
 		delete mmse;
 	}
@@ -67,7 +67,10 @@ bool LTSD::process(char *input){
 	float *amp = new float[fftsize];
 	for(int i=0; i<fftsize; i++) {
       if (forwardOutput != NULL){
-        amp[i] = sqrtf(powf(forwardOutput[i].real, 2.0) + powf(forwardOutput[i].imag, 2)) + 0.00001;
+        amp[i] = sqrtf(powf(forwardOutput[i].real, 2.0) + powf(forwardOutput[i].imag, 2.0)) + 0.000001;
+		  if (std::isnan(amp[i]) || std::isinf(amp[i])){
+			  amp[i] = 0.000001;
+		  }
 	  }
 	}
 
@@ -108,7 +111,7 @@ bool LTSD::isSignal(){
                   (m_lambda0 - m_lambda1) / (1.0 - (m_e1 / m_e0));
 
     //LOGE("signal: %f, noise: %f, ltsd: %f, lambda:%f, e0:%f", e, e2, ltsd, lamb, m_e0);
-
+	//LOGE("e0: %f, e1: %f, lam0: %f, lam1:%f", m_e0, m_e1, m_lambda0, m_lambda1);
 
 	if (e2 < m_e0){
 		if(ltsd > m_lambda0){
