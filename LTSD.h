@@ -40,6 +40,7 @@ private:
 	void createNoiseProfile();
 	float calcPower();
 	float calcNoisePower();
+	void initFFT();
 	int windowsize;
 	int fftsize;
 	int freqsize;

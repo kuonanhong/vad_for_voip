@@ -68,12 +68,19 @@ bool LTSD::process(char *input){
 	float *amp = new float[fftsize];
 	for(int i=0; i<fftsize; i++) {
       if (forwardOutput != NULL){
-        amp[i] = sqrtf(powf(forwardOutput[i].real, 2.0) + powf(forwardOutput[i].imag, 2.0)) + 0.000001;
+        amp[i] = sqrtf(powf(forwardOutput[i].real, 2.0) + powf(forwardOutput[i].imag, 2.0)) + 0.0000001;
 		  if (std::isnan(amp[i]) || std::isinf(amp[i])){
-			  amp[i] = 0.000001;
+			  amp[i] = 0.0000001;
 			  fft_errors++;
-		  }
+		  }else if (amp[i] > 100){
+			  fft_errors++;
+		  };
 	  }
+	}
+
+	if (fft_errors > 1000){
+		initFFT();
+		fft_errors = 0;
 	}
 
 	short* sig = new short[windowsize];
@@ -228,4 +235,9 @@ void LTSD::updateParams(double e0, double e1, double lambda0, double lambda1){
 
 int LTSD::fftErrors() {
 	return fft_errors;
+}
+
+void LTSD::initFFT() {
+	CkFftShutdown(context);
+	context = CkFftInit(windowsize, kCkFftDirection_Both, NULL, NULL);
 }
