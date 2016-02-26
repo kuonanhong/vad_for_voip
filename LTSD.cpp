@@ -78,11 +78,6 @@ bool LTSD::process(char *input){
 	  }
 	}
 
-	if (fft_errors > 1000){
-		initFFT();
-		fft_errors = 0;
-	}
-
 	short* sig = new short[windowsize];
 	memcpy(sig, signal, sizeof(short) * windowsize);
 	signal_history.push_back(sig);
