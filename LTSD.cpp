@@ -24,8 +24,10 @@ LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double la
 	fft_in = new float[windowsize];
 	ltse = new float[fftsize];
 	noise_profile = new float[fftsize];
+	power_spectrum = new float[fftsize];
 	for(int i=0; i< fftsize; i++){
 		noise_profile[i] = 0.0;
+		power_spectrum[i] = 0.0;
 	}
 
 	estimated = false;
@@ -33,6 +35,8 @@ LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double la
     context = CkFftInit(windowsize, kCkFftDirection_Both, NULL, NULL);
     forwardOutput = new CkFftComplex[windowsize/2 + 1];
     
+    parade = new PARADE(winsize, window);
+    //parade = NULL;
     mmse = NULL;
 }
 
@@ -49,10 +53,14 @@ LTSD::~LTSD() {
 	delete[] fft_in;
 	delete[] ltse;
 	delete[] noise_profile;
+	delete[] power_spectrum;
     CkFftShutdown(context);
     
 	if (mmse != NULL){
 		delete mmse;
+	}
+	if (parade != NULL){
+		delete parade;
 	}
 }
 
@@ -65,11 +73,15 @@ bool LTSD::process(char *input){
     CkFftRealForward(context, windowsize, fft_in, forwardOutput);
     
 	float *amp = new float[fftsize];
+	float t_avg_pow = 0.0;
 	for(int i=0; i<fftsize; i++) {
       if (forwardOutput != NULL){
         amp[i] = sqrtf(powf(forwardOutput[i].real, 2.0) + powf(forwardOutput[i].imag, 2)) + 0.00001;
+        power_spectrum[i] = amp[i] * amp[i];
+        t_avg_pow += power_spectrum[i];
 	  }
 	}
+	avg_pow = t_avg_pow / float(fftsize);
 
 	short* sig = new short[windowsize];
 	memcpy(sig, signal, sizeof(short) * windowsize);

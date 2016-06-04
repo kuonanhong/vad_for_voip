@@ -19,6 +19,7 @@
 #include "ckfft/ckfft.h"
 //#include "MinimumStatistics.h"
 #include "MmseBasedNpe.h"
+#include "PARADE.h"
 
 class LTSD {
 public:
@@ -51,9 +52,12 @@ private:
 	float* window;
 	float* ltse;
 	float* noise_profile;
+	float* power_spectrum;
+	float avg_pow;
 	bool estimated;
 
 	MmseBasedNpe *mmse;
+	PARADE *parade;
 	float *fft_in;
 	std::deque<float*> amp_history;
 	std::deque<short*> signal_history;
