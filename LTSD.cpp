@@ -22,6 +22,14 @@ LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double la
 	fft_errors = 0;
 	m_lambda0 = lambda0;
 	m_lambda1 = lambda1;
+
+	vad_history_size = 5;
+
+	vad_histories = new bool[vad_history_size];
+	for (int i=0; i < vad_history_size; i++){
+		vad_histories[i] = false;
+	}
+
 	fft_in = new float[windowsize];
 	ltse = new float[fftsize];
 	noise_profile = new float[fftsize];
@@ -99,8 +107,11 @@ bool LTSD::process(char *input){
 		delete[] amp_history[0];
 		amp_history.pop_front();
 
-		return isSignal();
+		bool decision = isSignal();
+		updateVadHistories(decision);
+		return vadDecision();
 	}else{
+		updateVadHistories(false);
 		return false;
 	}
 }
@@ -221,6 +232,21 @@ void LTSD::createWindow(){
 	}
 }
 
+void LTSD::updateVadHistories(bool decision){
+	for (int i=vad_history_size - 2; i > 0; i--){
+		vad_histories[i + 1] = vad_histories[i];
+	}
+	vad_histories[0] = decision;
+}
+
+bool LTSD::vadDecision(){
+	for(int i=0; i < vad_history_size; i++){
+		if (!vad_histories[i]){
+			return false;
+		}
+	}
+	return true;
+}
 void LTSD::updateParams(double e0, double e1, double lambda0, double lambda1){
  	m_e0 = e0;
 	m_e1 = e1;

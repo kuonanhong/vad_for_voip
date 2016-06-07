@@ -40,12 +40,15 @@ private:
 	void createNoiseProfile();
 	float calcPower();
 	float calcNoisePower();
+	void updateVadHistories(bool decision);
+	bool vadDecision();
 	void initFFT();
 	int windowsize;
 	int fftsize;
 	int freqsize;
 	int samplingrate;
 	int m_order;
+	int vad_history_size;
 	float m_e0;
 	float m_e1;
 	float m_lambda0;
@@ -53,6 +56,7 @@ private:
 	float* window;
 	float* ltse;
 	float* noise_profile;
+	bool* vad_histories;
 	bool estimated;
 
 	MmseBasedNpe *mmse;
