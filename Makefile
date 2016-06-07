@@ -2,21 +2,20 @@ CC :=g++
 CFLAGS :=  -I.
 LDFLAGS := -L.
 
-
 CKFFT_SRC_FILES := \
     ckfft/debug.cpp \
     ckfft/context.cpp \
-    ckfft/ckfft.cpp \
+	ckfft/ckfft.cpp \
     ckfft/fft.cpp \
     ckfft/fft_default.cpp \
     ckfft/fft_real.cpp \
     ckfft/fft_real_default.cpp \
-    ckfft/fft_neon.cpp \
-    ckfft/fft_real_neon.cpp
+	ckfft/fft_neon.cpp \
+	ckfft/fft_real_neon.cpp
 CKFFT_OBJS := $(CKFFT_SRC_FILES:.cpp=.o)
 
-all: ltsd.o ms.o mmse.o libckfft.so
-	$(CC) $(CFLAGS) $(LDFLAGS) -o vad  mmse.o ms.o ltsd.o vad.cpp -lckfft 
+all: parade.o ltsd.o ms.o mmse.o libckfft.so
+	$(CC) $(CFLAGS) $(LDFLAGS) -o vad parade.o ms.o mmse.o ltsd.o vad.cpp -lckfft
 
 ltsd.o: ltsd.cpp
 	$(CC) $(CFLAGS) -o ltsd.o -c LTSD.cpp
@@ -26,6 +25,9 @@ ms.o: MinimumStatistics.cpp
 
 mmse.o: MmseBasedNpe.cpp
 	$(CC) $(CFLAGS) -o mmse.o -c MmseBasedNpe.cpp
+
+parade.o: PARADE.cpp
+	$(CC) $(CFLAGS) -o parade.o -c PARADE.cpp
 
 libckfft.so: $(CKFFT_SRC_FILES)
 	$(CC) $(CFLAGS) -shared -fPIC -o libckfft.so $(CKFFT_SRC_FILES)

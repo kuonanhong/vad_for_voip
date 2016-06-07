@@ -48,7 +48,7 @@
 		AA201DE4164C006E0051D5DD /* fft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fft.h; path = ../fft.h; sourceTree = "<group>"; };
 		AA201DE5164C006E0051D5DD /* math_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = math_util.h; path = ../math_util.h; sourceTree = "<group>"; };
 		AA201DE6164C006E0051D5DD /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = platform.h; path = ../platform.h; sourceTree = "<group>"; };
-		AA201DF9164C00790051D5DD /* ckfft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ckfft.h; path = ../../../inc/ckfft/ckfft.h; sourceTree = "<group>"; };
+		AA201DF9164C00790051D5DD /* ckfft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ckfft.h; path = ../ckfft.h; sourceTree = "<group>"; };
 		AA3A95A71656AA3D00448310 /* debug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = debug.cpp; path = ../debug.cpp; sourceTree = "<group>"; };
 		AA75B5DD15EC6395008151B6 /* libckfft_macos.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libckfft_macos.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
