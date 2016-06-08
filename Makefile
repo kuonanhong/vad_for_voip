@@ -14,8 +14,8 @@ CKFFT_SRC_FILES := \
 	ckfft/fft_real_neon.cpp
 CKFFT_OBJS := $(CKFFT_SRC_FILES:.cpp=.o)
 
-all: parade.o ltsd.o ms.o mmse.o libckfft.so
-	$(CC) $(CFLAGS) $(LDFLAGS) -o vad parade.o ms.o mmse.o ltsd.o vad.cpp -lckfft
+all: lpcr.o parade.o ltsd.o ms.o mmse.o libckfft.so
+	$(CC) $(CFLAGS) $(LDFLAGS) -o vad lpcr.o parade.o ms.o mmse.o ltsd.o vad.cpp -lckfft
 
 ltsd.o: ltsd.cpp
 	$(CC) $(CFLAGS) -o ltsd.o -c LTSD.cpp
@@ -25,6 +25,9 @@ ms.o: MinimumStatistics.cpp
 
 mmse.o: MmseBasedNpe.cpp
 	$(CC) $(CFLAGS) -o mmse.o -c MmseBasedNpe.cpp
+
+lpcr.o:LPCResidual.cpp
+	$(CC) $(CFLAGS) -o lpcr.o -c LPCResidual.cpp
 
 parade.o: PARADE.cpp
 	$(CC) $(CFLAGS) -o parade.o -c PARADE.cpp

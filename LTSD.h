@@ -20,6 +20,7 @@
 //#include "MinimumStatistics.h"
 #include "MmseBasedNpe.h"
 #include "PARADE.h"
+#include "LPCResidual.h"
 
 class LTSD {
 public:
@@ -65,6 +66,7 @@ private:
 
 	MmseBasedNpe *mmse;
 	PARADE *parade;
+	LPCResidual *lpcr;
 	float *fft_in;
 	std::deque<float*> amp_history;
 	std::deque<short*> signal_history;
