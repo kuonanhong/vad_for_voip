@@ -51,6 +51,8 @@ LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double la
     parade = new PARADE(winsize, analysissize, window);
     //parade = NULL;
     mmse = NULL;
+
+    lpcr = new LPCResidual(winsize, 10);
 }
 
 LTSD::~LTSD() {
@@ -74,6 +76,10 @@ LTSD::~LTSD() {
 	}
 	if (parade != NULL){
 		delete parade;
+	}
+
+	if(lpcr != NULL){
+		delete lpcr;
 	}
 }
 
@@ -143,12 +149,15 @@ bool LTSD::isSignal(){
     float lamb = (m_lambda0 - m_lambda1) / (m_e0 - m_e1) * e2 + m_lambda0 -
                   (m_lambda0 - m_lambda1) / (1.0 - (m_e1 / m_e0));
 
-	float par = parade->process(power_spectrum, avg_pow);
+	float par =0.0;
     //LOGE("signal: %f, noise: %f, ltsd: %f, lambda:%f, e0:%f, par:%f", e, e2, ltsd, lamb, m_e0, par);
 	//LOGE("e0: %f, e1: %f, lam0: %f, lam1:%f", m_e0, m_e1, m_lambda0, m_lambda1);
 
+	lpcr->process(fft_in);
+
 	if (e2 < m_e0){
 		if(ltsd > m_lambda0){
+			par = parade->process(power_spectrum, avg_pow);
 			if (par < 2.0){
 				return false;
 			}else {
@@ -165,6 +174,7 @@ bool LTSD::isSignal(){
 		}
 	}else {
         if (ltsd > lamb) {
+        	par = parade->process(power_spectrum, avg_pow);
 			if (par < 2.0){
 				return false;
 			}else {
