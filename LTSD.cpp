@@ -24,7 +24,7 @@ LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double la
 	m_lambda0 = lambda0;
 	m_lambda1 = lambda1;
 
-	vad_history_size = 3;
+	vad_history_size = 5;
 
 	vad_histories = new bool[vad_history_size];
 	for (int i=0; i < vad_history_size; i++){
