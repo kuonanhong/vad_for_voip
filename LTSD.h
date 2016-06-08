@@ -45,6 +45,7 @@ private:
 	bool vadDecision();
 	void initFFT();
 	int windowsize;
+	int analysissize;
 	int fftsize;
 	int freqsize;
 	int samplingrate;

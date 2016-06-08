@@ -13,7 +13,8 @@
 
 LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double lambda0, double lambda1){
 	windowsize = winsize;
-	fftsize = winsize / 2 + 1;
+	analysissize = winsize * 4;
+	fftsize = analysissize / 2 + 1;
 	freqsize = fftsize / 2.5;
 	samplingrate = samprate;
 	m_order = order;
@@ -23,14 +24,17 @@ LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double la
 	m_lambda0 = lambda0;
 	m_lambda1 = lambda1;
 
-	vad_history_size = 5;
+	vad_history_size = 3;
 
 	vad_histories = new bool[vad_history_size];
 	for (int i=0; i < vad_history_size; i++){
 		vad_histories[i] = false;
 	}
 
-	fft_in = new float[windowsize];
+	fft_in = new float[analysissize];
+	for(int i=0; i< analysissize; i++){
+		fft_in[i] = 0.0;
+	}
 	ltse = new float[fftsize];
 	noise_profile = new float[fftsize];
 	power_spectrum = new float[fftsize];
@@ -41,10 +45,10 @@ LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double la
 
 	estimated = false;
 	createWindow();
-    context = CkFftInit(windowsize, kCkFftDirection_Both, NULL, NULL);
-    forwardOutput = new CkFftComplex[windowsize/2 + 1];
+    context = CkFftInit(analysissize, kCkFftDirection_Both, NULL, NULL);
+    forwardOutput = new CkFftComplex[analysissize/2 + 1];
     
-    parade = new PARADE(winsize, window);
+    parade = new PARADE(winsize, analysissize, window);
     //parade = NULL;
     mmse = NULL;
 }
@@ -79,7 +83,7 @@ bool LTSD::process(char *input){
 		fft_in[i]=(float(signal[i]) / 32767.0) * window[i];
 	}
 
-    CkFftRealForward(context, windowsize, fft_in, forwardOutput);
+    CkFftRealForward(context, analysissize, fft_in, forwardOutput);
     
 	float *amp = new float[fftsize];
 	float t_avg_pow = 0.0;
@@ -88,14 +92,15 @@ bool LTSD::process(char *input){
         amp[i] = sqrtf(powf(forwardOutput[i].real, 2.0) + powf(forwardOutput[i].imag, 2.0)) + 0.0000001;
 		  if (std::isnan(amp[i]) || std::isinf(amp[i])){
 			  amp[i] = 0.0000001;
-              power_spectrum[i] = amp[i] * amp[i];
-              t_avg_pow += power_spectrum[i];
 			  fft_errors++;
 		  }else if (amp[i] > 100){
 			  fft_errors++;
 		  };
+		  power_spectrum[i] = amp[i] * amp[i];
+		  t_avg_pow += power_spectrum[i];
 	  }
 	}
+
 	avg_pow = t_avg_pow / float(fftsize);
 
 	short* sig = new short[windowsize];
@@ -120,6 +125,7 @@ bool LTSD::process(char *input){
 		amp_history.pop_front();
 
 		bool decision = isSignal();
+		//LOGE("%d", decision);
 		updateVadHistories(decision);
 		return vadDecision();
 	}else{
@@ -137,12 +143,17 @@ bool LTSD::isSignal(){
     float lamb = (m_lambda0 - m_lambda1) / (m_e0 - m_e1) * e2 + m_lambda0 -
                   (m_lambda0 - m_lambda1) / (1.0 - (m_e1 / m_e0));
 
-    //LOGE("signal: %f, noise: %f, ltsd: %f, lambda:%f, e0:%f", e, e2, ltsd, lamb, m_e0);
+	float par = parade->process(power_spectrum, avg_pow);
+    //LOGE("signal: %f, noise: %f, ltsd: %f, lambda:%f, e0:%f, par:%f", e, e2, ltsd, lamb, m_e0, par);
 	//LOGE("e0: %f, e1: %f, lam0: %f, lam1:%f", m_e0, m_e1, m_lambda0, m_lambda1);
 
 	if (e2 < m_e0){
 		if(ltsd > m_lambda0){
-			return true;
+			if (par < 2.0){
+				return false;
+			}else {
+				return true;
+			}
 		}else{
 			return false;
 		}
@@ -154,7 +165,11 @@ bool LTSD::isSignal(){
 		}
 	}else {
         if (ltsd > lamb) {
-            return true;
+			if (par < 2.0){
+				return false;
+			}else {
+				return true;
+			}
         } else {
             return false;
         }
@@ -245,7 +260,7 @@ void LTSD::createWindow(){
 }
 
 void LTSD::updateVadHistories(bool decision){
-	for (int i=vad_history_size - 2; i > 0; i--){
+	for (int i=vad_history_size - 2; i >= 0; i--){
 		vad_histories[i + 1] = vad_histories[i];
 	}
 	vad_histories[0] = decision;
@@ -272,5 +287,5 @@ int LTSD::fftErrors() {
 
 void LTSD::initFFT() {
 	CkFftShutdown(context);
-	context = CkFftInit(windowsize, kCkFftDirection_Both, NULL, NULL);
+	context = CkFftInit(analysissize, kCkFftDirection_Both, NULL, NULL);
 }
