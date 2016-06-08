@@ -151,14 +151,14 @@ bool LTSD::isSignal(){
 
 	float par =0.0;
 	float k = 0.0;
-	k = lpcr->process(fft_in);
     //LOGE("signal: %f, noise: %f, ltsd: %f, lambda:%f, e0:%f, lpc_k:%f", e, e2, ltsd, lamb, m_e0, k);
 	//LOGE("e0: %f, e1: %f, lam0: %f, lam1:%f", m_e0, m_e1, m_lambda0, m_lambda1);
 
 	if (e2 < m_e0){
 		if(ltsd > m_lambda0){
 			par = parade->process(power_spectrum, avg_pow);
-			if (par < 2.0){
+			k = lpcr->process(fft_in);
+			if (par < 2.0 || k < 4){
 				return false;
 			}else {
 				return true;
@@ -175,7 +175,8 @@ bool LTSD::isSignal(){
 	}else {
         if (ltsd > lamb) {
         	par = parade->process(power_spectrum, avg_pow);
-			if (par < 2.0){
+			k = lpcr->process(fft_in);
+			if (par < 2.0 || k < 4){
 				return false;
 			}else {
 				return true;
