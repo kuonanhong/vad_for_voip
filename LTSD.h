@@ -68,8 +68,8 @@ private:
 	PARADE *parade;
 	LPCResidual *lpcr;
 	float* __restrict fft_in;
-	std::deque<float* __restrict> amp_history;
-	std::deque<short* __restrict> signal_history;
+	std::deque<float*> amp_history;
+	std::deque<short*> signal_history;
 
     CkFftContext* context;
     CkFftComplex* forwardOutput;

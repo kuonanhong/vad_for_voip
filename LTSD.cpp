@@ -56,10 +56,10 @@ LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double la
 }
 
 LTSD::~LTSD() {
-	for (std::deque<short* __restrict>::iterator its = signal_history.begin(); its != signal_history.end(); its++){
+	for (std::deque<short*>::iterator its = signal_history.begin(); its != signal_history.end(); its++){
 		delete[] (*its);
 	}
-	for (std::deque<float* __restrict>::iterator ita = amp_history.begin(); ita != amp_history.end(); ita++){
+	for (std::deque<float*>::iterator ita = amp_history.begin(); ita != amp_history.end(); ita++){
 		delete[] (*ita);
 	}
 	if (window != NULL){
