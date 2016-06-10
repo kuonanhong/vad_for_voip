@@ -15,13 +15,13 @@
 
 class MmseBasedNpe {
 public:
-	MmseBasedNpe(int size, float *noiseProfile);
+	MmseBasedNpe(int size, float* __restrict noiseProfile);
 	virtual ~MmseBasedNpe();
-	void process(float *amp);
-	void updateNoiseProfile(float *noise);
+	void process(float* __restrict amp);
+	void updateNoiseProfile(float* __restrict noise);
 private:
 	int fftsize;
-	float* PH1mean;
+	float* __restrict PH1mean;
 	float alphaPH1mean;
 	float alphaPSD;
 	float q;
@@ -31,12 +31,12 @@ private:
 	float logGLRFact;
 	float GLRexp;
 
-	float* noisePow;
-	float* noisyPer;
-	float* snrPost1;
-	float* estimate;
-	float* GLR;
-	float* PH1;
+	float* __restrict noisePow;
+	float* __restrict noisyPer;
+	float* __restrict snrPost1;
+	float* __restrict estimate;
+	float* __restrict GLR;
+	float* __restrict PH1;
 
 };
 

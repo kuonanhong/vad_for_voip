@@ -10,7 +10,7 @@
 #include "LTSD.h"
 
 
-MmseBasedNpe::MmseBasedNpe(int size, float *noiseProfile) {
+MmseBasedNpe::MmseBasedNpe(int size, float* __restrict noiseProfile) {
 	// TODO Auto-generated constructor stub
 	fftsize = size;
 	alphaPH1mean = 0.9;
@@ -45,7 +45,7 @@ MmseBasedNpe::~MmseBasedNpe() {
 }
 
 
-void MmseBasedNpe::process(float* amp) {
+void MmseBasedNpe::process(float* __restrict amp) {
 	int i = 0;
 	float tmp;
 	for(i = 0; i< fftsize; i++) {
@@ -72,7 +72,7 @@ void MmseBasedNpe::process(float* amp) {
 	}
 }
 
-void MmseBasedNpe::updateNoiseProfile(float *noise){
+void MmseBasedNpe::updateNoiseProfile(float* __restrict noise){
 	memcpy(noise, noisePow, sizeof(float) * fftsize);
 }
 

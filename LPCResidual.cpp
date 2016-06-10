@@ -35,7 +35,7 @@ LPCResidual::~LPCResidual() {
 }
 
 
-float LPCResidual::process(float *windowed){
+float LPCResidual::process(float* __restrict windowed){
 	//wAutocorrelate(float *x, unsigned int L, float *R, unsigned int P, float lambda){
 	wAutocorrelate(windowed, winsize, R, order, 0.0);
 	LevinsonRecursion(order, R, A, K);
@@ -46,7 +46,7 @@ float LPCResidual::process(float *windowed){
 	return last_k;
 }
 
-void LPCResidual::calcResiduals(float *windowed){
+void LPCResidual::calcResiduals(float* __restrict windowed){
 	float predict = 0.0;
 	for (int i = order; i < winsize; i++){
 		predict = 0.0;

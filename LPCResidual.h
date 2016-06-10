@@ -13,20 +13,20 @@ public:
 	LPCResidual(int windowsize, int lpcorder);
 	virtual ~LPCResidual();
 
-	float process(float *signal);
+	float process(float* __restrict signal);
 private:
 
-	void calcResiduals(float *windowed);
+	void calcResiduals(float* __restrict windowed);
 	float calcKurtosis();
 
 	int winsize;
 	int ressize;
 	float last_k;
 	unsigned int order;
-	float *R;
-	float *K;
-	float *A;
-	float *Residuals;
+	float* __restrict R;
+	float* __restrict K;
+	float* __restrict A;
+	float* __restrict Residuals;
 };
 
 #endif /* LPCRESIDUAL_H_ */

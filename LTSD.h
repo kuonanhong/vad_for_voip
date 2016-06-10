@@ -30,7 +30,7 @@ public:
 	// sampling rateは、録音時のサンプリングレートを用いる
 	LTSD(int winsize, int samprate, int order = 7,double e0 = 40.0, double e1 = 80.0, double lambda0 = 20.0, double lambda1 = 10.0);
 	virtual ~LTSD();
-	bool process(char *input);
+	bool process(char* __restrict input);
 	char* getSignal(); // 取得したsignalは必ず利用後deleteすること。byteで返しているが、アーキテクチャのエンディアンでのshort型の配列になっている
     void updateParams(double e0, double e1, double lambda0, double lambda1);
 	int fftErrors();
@@ -56,20 +56,20 @@ private:
 	float m_e1;
 	float m_lambda0;
 	float m_lambda1;
-	float* window;
-	float* ltse;
-	float* noise_profile;
+	float* __restrict window;
+	float* __restrict ltse;
+	float* __restrict noise_profile;
 	bool* vad_histories;
-	float* power_spectrum;
+	float* __restrict power_spectrum;
 	float avg_pow;
 	bool estimated;
 
 	MmseBasedNpe *mmse;
 	PARADE *parade;
 	LPCResidual *lpcr;
-	float *fft_in;
-	std::deque<float*> amp_history;
-	std::deque<short*> signal_history;
+	float* __restrict fft_in;
+	std::deque<float* __restrict> amp_history;
+	std::deque<short* __restrict> signal_history;
 
     CkFftContext* context;
     CkFftComplex* forwardOutput;

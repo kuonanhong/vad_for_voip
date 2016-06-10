@@ -84,14 +84,14 @@ LTSD::~LTSD() {
 }
 
 bool LTSD::process(char *input){
-    short *signal = (short *)input;
+    short* __restrict signal = (short *)input;
 	for(int i=0; i<windowsize; i++){
 		fft_in[i]=(float(signal[i]) / 32767.0) * window[i];
 	}
 
     CkFftRealForward(context, analysissize, fft_in, forwardOutput);
     
-	float *amp = new float[fftsize];
+	float* __restrict amp = new float[fftsize];
 	float t_avg_pow = 0.0;
 	for(int i=0; i<fftsize; i++) {
       if (forwardOutput != NULL){
@@ -109,7 +109,7 @@ bool LTSD::process(char *input){
 
 	avg_pow = t_avg_pow / float(fftsize);
 
-	short* sig = new short[windowsize];
+	short* __restrict sig = new short[windowsize];
 	memcpy(sig, signal, sizeof(short) * windowsize);
 	signal_history.push_back(sig);
 	amp_history.push_back(amp);
@@ -188,7 +188,7 @@ bool LTSD::isSignal(){
 }
 
 float LTSD::calcPower(){
-	float* amp = amp_history.at(amp_history.size() - 1);
+	float* __restrict amp = amp_history.at(amp_history.size() - 1);
 	float sum = 0.0;
 	for(int i = 0; i < freqsize; i++){
 		sum += amp[i] * amp[i];
@@ -221,7 +221,7 @@ void LTSD::calcLTSE(){
 	for(i=0;i < freqsize; i++){
 		ltse[i] = 0.0;
 	}
-	for (std::deque<float*>::iterator ita = amp_history.begin(); ita != amp_history.end(); ita++){
+	for (std::deque<float* __restrict>::iterator ita = amp_history.begin(); ita != amp_history.end(); ita++){
 		for(i=0;i < freqsize; i++){
 			amp = (*ita)[i];
 			if (ltse[i] < amp){
@@ -245,7 +245,7 @@ float LTSD::calcLTSD(){
 void LTSD::createNoiseProfile(){
 	int i = 0;
 	float s = (float)amp_history.size();
-	for (std::deque<float*>::iterator ita = amp_history.begin(); ita != amp_history.end(); ita++){
+	for (std::deque<float* __restrict>::iterator ita = amp_history.begin(); ita != amp_history.end(); ita++){
         float *x = (*ita);
 		for(i=0;i < fftsize; i++){
 			noise_profile[i] += x[i];

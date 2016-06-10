@@ -25,7 +25,7 @@ float calc_hypotes(float pp, float pa, float beta){
 			std::exp( (-1.0 / (2 * std::pow(beta, 2))) * std::pow((pa / pp), 2));
 }
 
-PARADE::PARADE(int windowsize, int asize, float *window) {
+PARADE::PARADE(int windowsize, int asize, float* __restrict window) {
 	// TODO Auto-generated constructor stub
 	analysissize = asize;
 	winsize = windowsize;
@@ -45,7 +45,7 @@ PARADE::~PARADE() {
 }
 
 
-float PARADE::process(float *power, float avg_pow){
+float PARADE::process(float* __restrict power, float avg_pow){
 	double smax = -FLT_MAX;
 	int lenmax = 0;
 	int c = 0;
