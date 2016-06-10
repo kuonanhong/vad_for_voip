@@ -30,7 +30,7 @@ public:
 	// sampling rateは、録音時のサンプリングレートを用いる
 	LTSD(int winsize, int samprate, int order = 7,double e0 = 40.0, double e1 = 80.0, double lambda0 = 20.0, double lambda1 = 10.0);
 	virtual ~LTSD();
-	bool process(char* __restrict input);
+	bool process(char* input);
 	char* getSignal(); // 取得したsignalは必ず利用後deleteすること。byteで返しているが、アーキテクチャのエンディアンでのshort型の配列になっている
     void updateParams(double e0, double e1, double lambda0, double lambda1);
 	int fftErrors();
