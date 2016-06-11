@@ -9,17 +9,17 @@
 #define PARADE_H_
 
 class PARADE {
-public:
-	PARADE(int winsize, int asize, float *window);
-	virtual ~PARADE();
-	float process(float *power, float avg_pow);
+ public:
+  PARADE(int winsize, int asize, float *window);
+  virtual ~PARADE();
+  float process(float *power, float avg_pow);
 
-private:
-	float eta;
-	int analysissize;
-	int winsize;
-	int fftsize;
-	float last_score;
+ private:
+  float eta;
+  int analysissize;
+  int winsize;
+  int fftsize;
+  float last_score;
 };
 
 #endif /* PARADE_H_ */

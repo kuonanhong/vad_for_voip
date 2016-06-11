@@ -14,29 +14,29 @@
 #include <cmath>
 
 class MmseBasedNpe {
-public:
-	MmseBasedNpe(int size, float* __restrict noiseProfile);
-	virtual ~MmseBasedNpe();
-	void process(float* __restrict amp);
-	void updateNoiseProfile(float* __restrict noise);
-private:
-	int fftsize;
-	float* __restrict PH1mean;
-	float alphaPH1mean;
-	float alphaPSD;
-	float q;
-	float priorFact;
-	float xiOptDb;
-	float xiOpt;
-	float logGLRFact;
-	float GLRexp;
+ public:
+  MmseBasedNpe(int size, float* __restrict noiseProfile);
+  virtual ~MmseBasedNpe();
+  void process(float* __restrict amp);
+  void updateNoiseProfile(float* __restrict noise);
+ private:
+  int fftsize;
+  float* __restrict PH1mean;
+  float alphaPH1mean;
+  float alphaPSD;
+  float q;
+  float priorFact;
+  float xiOptDb;
+  float xiOpt;
+  float logGLRFact;
+  float GLRexp;
 
-	float* __restrict noisePow;
-	float* __restrict noisyPer;
-	float* __restrict snrPost1;
-	float* __restrict estimate;
-	float* __restrict GLR;
-	float* __restrict PH1;
+  float* __restrict noisePow;
+  float* __restrict noisyPer;
+  float* __restrict snrPost1;
+  float* __restrict estimate;
+  float* __restrict GLR;
+  float* __restrict PH1;
 
 };
 

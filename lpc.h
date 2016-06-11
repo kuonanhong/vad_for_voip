@@ -5,39 +5,39 @@
 //find the order-P autocorrelation array, R, for the sequence x of length L and warping of lambda
 //wAutocorrelate(&pfSrc[stIndex],siglen,R,P,0);
 void wAutocorrelate(float* __restrict x, unsigned int L, float* __restrict R, unsigned int P, float lambda){
-    double *dl = new double [L];
-    double *Rt = new double [L];
-    double r1,r2,r1t;
-    R[0]=0;
-    Rt[0]=0;
+  double *dl = new double [L];
+  double *Rt = new double [L];
+  double r1,r2,r1t;
+  R[0]=0;
+  Rt[0]=0;
+  r1=0;
+  r2=0;
+  r1t=0;
+  for(unsigned int k=0; k<L;k++){
+    Rt[0]+=double(x[k])*double(x[k]);
+      
+    dl[k]=r1-double(lambda)*double(x[k]-r2);
+    r1 = x[k];
+    r2 = dl[k];
+  }
+  for(unsigned int i=1; i<=P; i++){
+    Rt[i]=0;
     r1=0;
     r2=0;
-    r1t=0;
     for(unsigned int k=0; k<L;k++){
-      Rt[0]+=double(x[k])*double(x[k]);
-      
-      dl[k]=r1-double(lambda)*double(x[k]-r2);
-      r1 = x[k];
+      Rt[i]+=double(dl[k])*double(x[k]);
+        
+      r1t = dl[k];
+      dl[k]=r1-double(lambda)*double(r1t-r2);
+      r1 = r1t;
       r2 = dl[k];
     }
-    for(unsigned int i=1; i<=P; i++){
-      Rt[i]=0;
-      r1=0;
-      r2=0;
-      for(unsigned int k=0; k<L;k++){
-        Rt[i]+=double(dl[k])*double(x[k]);
-        
-        r1t = dl[k];
-        dl[k]=r1-double(lambda)*double(r1t-r2);
-        r1 = r1t;
-        r2 = dl[k];
-      }
-    }
-    for(int i=0; i<=P; i++){
-      R[i]=float(Rt[i]);
-    }
-    delete[] dl;
-    delete[] Rt;
+  }
+  for(int i=0; i<=P; i++){
+    R[i]=float(Rt[i]);
+  }
+  delete[] dl;
+  delete[] Rt;
 }
 
 // Calculate the Levinson-Durbin recursion for the autocorrelation sequence R of length P+1 and return the autocorrelation coefficients a and reflection coefficients K
