@@ -24,7 +24,7 @@ LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double la
   m_lambda0 = lambda0;
   m_lambda1 = lambda1;
 
-  vad_history_size = 5;
+  vad_history_size = 1;
 
   vad_histories = new bool[vad_history_size];
   for (int i=0; i < vad_history_size; i++){
@@ -151,13 +151,13 @@ bool LTSD::isSignal(){
 
   float par =0.0;
   float k = 0.0;
-  //LOGE("signal: %f, noise: %f, ltsd: %f, lambda:%f, e0:%f, lpc_k:%f", e, e2, ltsd, lamb, m_e0, k);
+  //LOGE("signal: %f, noise: %f, ltsd: %f, lambda:%f, e0:%f, lpc_k:%f, par:%f", e, e2, ltsd, lamb, m_e0, k, par);
   //LOGE("e0: %f, e1: %f, lam0: %f, lam1:%f", m_e0, m_e1, m_lambda0, m_lambda1);
 
   if (e2 < m_e0){
     if(ltsd > m_lambda0){
-      par = parade->process(power_spectrum, avg_pow);
-      k = lpcr->process(fft_in);
+        par = parade->process(power_spectrum, avg_pow);
+        k = lpcr->process(fft_in);
       if (par < 2.0 || k < 4){
         return false;
       }else {
@@ -285,6 +285,7 @@ bool LTSD::vadDecision(){
   }
   return true;
 }
+
 void LTSD::updateParams(double e0, double e1, double lambda0, double lambda1){
   m_e0 = e0;
   m_e1 = e1;
