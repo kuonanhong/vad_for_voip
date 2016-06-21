@@ -7,8 +7,8 @@
 
 #include "LTSD.h"
 
-//#include <android/log.h>
-//#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_VERBOSE, "vaddsp-jni", __VA_ARGS__))
+#include <android/log.h>
+#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_VERBOSE, "vaddsp-jni", __VA_ARGS__))
 
 
 LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double lambda0, double lambda1){
@@ -151,13 +151,19 @@ bool LTSD::isSignal(){
 
   float par =0.0;
   float k = 0.0;
-  //LOGE("signal: %f, noise: %f, ltsd: %f, lambda:%f, e0:%f, lpc_k:%f, par:%f", e, e2, ltsd, lamb, m_e0, k, par);
+  par = parade->process(power_spectrum, avg_pow);
+  k = lpcr->process(fft_in);
+  LOGE("signal: %f, noise: %f, ltsd: %f, lambda:%f, e0:%f, lpc_k:%f, par:%f", e, e2, ltsd, lamb, m_e0, k, par);
   //LOGE("e0: %f, e1: %f, lam0: %f, lam1:%f", m_e0, m_e1, m_lambda0, m_lambda1);
 
+  if (par > 200.0 && k > 4){
+    return true;
+  }else{
+    return false;
+  }
+  
   if (e2 < m_e0){
     if(ltsd > m_lambda0){
-        par = parade->process(power_spectrum, avg_pow);
-        k = lpcr->process(fft_in);
       if (par < 2.0 || k < 4){
         return false;
       }else {
@@ -174,8 +180,6 @@ bool LTSD::isSignal(){
     }
   }else {
     if (ltsd > lamb) {
-      par = parade->process(power_spectrum, avg_pow);
-      k = lpcr->process(fft_in);
       if (par < 2.0 || k < 4){
         return false;
       }else {
