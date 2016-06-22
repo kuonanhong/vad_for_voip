@@ -9,8 +9,8 @@
 
 #include "LTSD.h"
 
-#include <android/log.h>
-#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_VERBOSE, "vadvopi-jni", __VA_ARGS__))
+//#include <android/log.h>
+//#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_VERBOSE, "vadvopi-jni", __VA_ARGS__))
 
 
 MmseBasedNpe::MmseBasedNpe(int size, float* __restrict noiseProfile) {
