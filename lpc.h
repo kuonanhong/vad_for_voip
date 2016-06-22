@@ -1,6 +1,7 @@
 #ifndef LPC_H_
 #define LPC_H_
 
+// from http://www.musicdsp.org/showone.php?id=137
 
 //find the order-P autocorrelation array, R, for the sequence x of length L and warping of lambda
 //wAutocorrelate(&pfSrc[stIndex],siglen,R,P,0);
