@@ -9,6 +9,9 @@
 
 #include "LTSD.h"
 
+#include <android/log.h>
+#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_VERBOSE, "vadvopi-jni", __VA_ARGS__))
+
 
 MmseBasedNpe::MmseBasedNpe(int size, float* __restrict noiseProfile) {
   // TODO Auto-generated constructor stub
@@ -18,19 +21,19 @@ MmseBasedNpe::MmseBasedNpe(int size, float* __restrict noiseProfile) {
 
   q = 0.5; // a priori probability of speech presence:
   priorFact = q / (1 - q);
-  xiOptDb = 15.0; // optimal fixed a priori SNR for SPP estimation
-  xiOpt = powf(10.0, (xiOptDb / 10.0));
-  logGLRFact = logf(1.0 / (1.0 + xiOpt));
+  xiOptDb = 30.0; // optimal fixed a priori SNR for SPP estimation
+  xiOpt = std::pow(10.0, (xiOptDb / 10.0));
+  logGLRFact = std::log(1.0 / (1.0 + xiOpt));
   GLRexp = xiOpt / (1.0 + xiOpt);
 
-  PH1mean = makeVector(fftsize, (float)0.5);
+  PH1mean = makeVector(fftsize, (double)0.5);
   noisePow = new float[fftsize];
-  memcpy(noisePow, noiseProfile, sizeof(float) * fftsize);
+  memcpy(noisePow, noiseProfile, sizeof(double) * fftsize);
   noisyPer = new float[fftsize];
-  snrPost1 = new float[fftsize];
-  estimate = new float[fftsize];
-  GLR = new float[fftsize];
-  PH1 = new float[fftsize];
+  snrPost1 = new double[fftsize];
+  estimate = new double[fftsize];
+  GLR = new double[fftsize];
+  PH1 = new double[fftsize];
 }
 
 MmseBasedNpe::~MmseBasedNpe() {
@@ -47,16 +50,16 @@ MmseBasedNpe::~MmseBasedNpe() {
 
 void MmseBasedNpe::process(float* __restrict amp) {
   int i = 0;
-  float tmp;
+  double tmp;
   for(i = 0; i< fftsize; i++) {
     noisyPer[i] = amp[i] * amp[i];
-    snrPost1[i] = noisyPer[i] / noisePow[i];
-
+    snrPost1[i] = (double)noisyPer[i] / (double)noisePow[i];
+    
     tmp = logGLRFact + GLRexp * snrPost1[i];
     if (tmp > 200.0) {
       tmp = 200.0;
     }
-    GLR[i] = priorFact * expf(tmp);
+    GLR[i] = priorFact * std::exp(tmp);
     PH1[i] = GLR[i] / (1.0 + GLR[i]);
     PH1mean[i] = alphaPH1mean * PH1mean[i] + (1.0 - alphaPH1mean) * PH1[i];
     if (PH1mean[i] > 0.99) {
@@ -64,11 +67,8 @@ void MmseBasedNpe::process(float* __restrict amp) {
         PH1[i] = 0.99;
       }
     }
-    estimate[i] = PH1[i] * noisePow[i] + (1.0 - alphaPSD) * noisyPer[i];
-    noisePow[i] = alphaPSD * noisePow[i] + (1.0 - alphaPSD) * estimate[i];
-    if (std::isnan(noisePow[i])) {
-      noisePow[i] = 0.0000001;
-    }
+    estimate[i] = PH1[i] * (double)noisePow[i] + (1.0 - PH1[i]) * (double)noisyPer[i];
+    noisePow[i] = float(alphaPSD * (double)noisePow[i] + (1.0 - alphaPSD) * estimate[i]);
   }
 }
 

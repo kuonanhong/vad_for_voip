@@ -10,7 +10,6 @@
 
 #include "utils.h"
 #include "string.h"
-#include "math.h"
 #include <cmath>
 
 class MmseBasedNpe {
@@ -21,22 +20,22 @@ class MmseBasedNpe {
   void updateNoiseProfile(float* __restrict noise);
  private:
   int fftsize;
-  float* __restrict PH1mean;
-  float alphaPH1mean;
-  float alphaPSD;
-  float q;
-  float priorFact;
-  float xiOptDb;
-  float xiOpt;
-  float logGLRFact;
-  float GLRexp;
+  double* __restrict PH1mean;
+  double alphaPH1mean;
+  double alphaPSD;
+  double q;
+  double priorFact;
+  double xiOptDb;
+  double xiOpt;
+  double logGLRFact;
+  double GLRexp;
 
   float* __restrict noisePow;
   float* __restrict noisyPer;
-  float* __restrict snrPost1;
-  float* __restrict estimate;
-  float* __restrict GLR;
-  float* __restrict PH1;
+  double* __restrict snrPost1;
+  double* __restrict estimate;
+  double* __restrict GLR;
+  double* __restrict PH1;
 
 };
 

@@ -148,23 +148,18 @@ bool LTSD::isSignal(){
   //float sn = fabs(e - e2);
   float lamb = (m_lambda0 - m_lambda1) / (m_e0 - m_e1) * e2 + m_lambda0 -
     (m_lambda0 - m_lambda1) / (1.0 - (m_e1 / m_e0));
-
   float par =0.0;
   float k = 0.0;
-  par = parade->process(power_spectrum, avg_pow);
+  float kthresh = 4.0;
+  // par = parade->process(power_spectrum, avg_pow);
   k = lpcr->process(fft_in);
   LOGE("signal: %f, noise: %f, ltsd: %f, lambda:%f, e0:%f, lpc_k:%f, par:%f", e, e2, ltsd, lamb, m_e0, k, par);
   //LOGE("e0: %f, e1: %f, lam0: %f, lam1:%f", m_e0, m_e1, m_lambda0, m_lambda1);
-
-  if (par > 200.0 && k > 4){
-    return true;
-  }else{
-    return false;
-  }
-  
+  //LOGE("pow: %f, lpc_k:%f, par:%f", e, k, par);
   if (e2 < m_e0){
+    // 静音環境
     if(ltsd > m_lambda0){
-      if (par < 2.0 || k < 4){
+      if (k < 4){
         return false;
       }else {
         return true;
@@ -173,14 +168,20 @@ bool LTSD::isSignal(){
       return false;
     }
   }else if (e2 > m_e1){
+    // 高ノイズ環境
     if(ltsd > m_lambda1){
-      return true;
+      if (k < 4){
+        return false;
+      }else{
+        return true;
+      }
     }else{
       return false;
     }
   }else {
+    // 中間
     if (ltsd > lamb) {
-      if (par < 2.0 || k < 4){
+      if (k < 4){
         return false;
       }else {
         return true;
