@@ -14,10 +14,10 @@
 
 class MmseBasedNpe {
  public:
-  MmseBasedNpe(int size, float* __restrict noiseProfile);
+  MmseBasedNpe(int size, float* noiseProfile);
   virtual ~MmseBasedNpe();
   void process(float* __restrict amp);
-  void updateNoiseProfile(float* __restrict noise);
+  void updateNoiseProfile(float* noise);
  private:
   int fftsize;
   double* __restrict PH1mean;

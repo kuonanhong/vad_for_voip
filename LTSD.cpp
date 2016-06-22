@@ -7,9 +7,11 @@
 
 #include "LTSD.h"
 
-//#include <android/log.h>
-//#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_VERBOSE, "vaddsp-jni", __VA_ARGS__))
 
+#ifdef __ANDROID__
+  #include <android/log.h>
+  #define LOGE(...) ((void)__android_log_print(ANDROID_LOG_VERBOSE, "vaddsp-jni", __VA_ARGS__))
+#endif
 
 LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double lambda0, double lambda1){
   windowsize = winsize;
@@ -46,7 +48,7 @@ LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double la
   estimated = false;
   createWindow();
   context = CkFftInit(analysissize, kCkFftDirection_Both, NULL, NULL);
-  forwardOutput = new CkFftComplex[analysissize/2 + 1];
+  forwardOutput = new CkFftComplex[analysissize];
     
   parade = new PARADE(winsize, analysissize, window);
   //parade = NULL;
@@ -69,6 +71,7 @@ LTSD::~LTSD() {
   delete[] ltse;
   delete[] noise_profile;
   delete[] power_spectrum;
+  delete[] forwardOutput;
   CkFftShutdown(context);
 
   if (mmse != NULL){
@@ -84,7 +87,7 @@ LTSD::~LTSD() {
 }
 
 bool LTSD::process(char *input){
-  short* __restrict signal = (short *)input;
+  short* signal = (short *)input;
   for(int i=0; i<windowsize; i++){
     fft_in[i]=(float(signal[i]) / 32767.0) * window[i];
   }
@@ -95,7 +98,7 @@ bool LTSD::process(char *input){
   float t_avg_pow = 0.0;
   for(int i=0; i<fftsize; i++) {
     if (forwardOutput != NULL){
-      amp[i] = sqrtf(powf(forwardOutput[i].real, 2.0) + powf(forwardOutput[i].imag, 2.0)) + 0.0000001;
+        amp[i] = std::sqrt(std::pow(forwardOutput[i].real, 2.0) + std::pow(forwardOutput[i].imag, 2.0)) + 0.0000001;
       if (std::isnan(amp[i]) || std::isinf(amp[i])){
         amp[i] = 0.0000001;
         fft_errors++;
@@ -143,16 +146,18 @@ bool LTSD::process(char *input){
 bool LTSD::isSignal(){
   calcLTSE();
   float ltsd = calcLTSD();
-  float e = calcPower();
+  //float e = calcPower();
   float e2 = calcNoisePower();
   //float sn = fabs(e - e2);
   float lamb = (m_lambda0 - m_lambda1) / (m_e0 - m_e1) * e2 + m_lambda0 -
     (m_lambda0 - m_lambda1) / (1.0 - (m_e1 / m_e0));
-  float par =0.0;
+  //float par =0.0;
   float k = 0.0;
-  float kthresh = 4.0;
+  //float kthresh = 4.0;
   // par = parade->process(power_spectrum, avg_pow);
   k = lpcr->process(fft_in);
+  //printf("noise: %f, ltsd: %f, lambda:%f, e0:%f, lpc_k:%f\n", e2, ltsd, lamb, m_e0, k);
+  //k = 5.0;
   //LOGE("signal: %f, noise: %f, ltsd: %f, lambda:%f, e0:%f, lpc_k:%f, par:%f", e, e2, ltsd, lamb, m_e0, k, par);
   //LOGE("e0: %f, e1: %f, lam0: %f, lam1:%f", m_e0, m_e1, m_lambda0, m_lambda1);
   //LOGE("pow: %f, lpc_k:%f, par:%f", e, k, par);
@@ -256,9 +261,8 @@ void LTSD::createNoiseProfile(){
       noise_profile[i] += x[i];
     }
   }
-  float sum = 0.0;
   for(i=0;i < fftsize; i++){
-    noise_profile[i] = powf(noise_profile[i] / s, 2);
+      noise_profile[i] = std::pow(noise_profile[i] / s, 2);
   }
 }
 

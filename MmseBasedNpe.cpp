@@ -9,11 +9,8 @@
 
 #include "LTSD.h"
 
-//#include <android/log.h>
-//#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_VERBOSE, "vadvopi-jni", __VA_ARGS__))
 
-
-MmseBasedNpe::MmseBasedNpe(int size, float* __restrict noiseProfile) {
+MmseBasedNpe::MmseBasedNpe(int size, float* noiseProfile) {
   // TODO Auto-generated constructor stub
   fftsize = size;
   alphaPH1mean = 0.9;
@@ -28,7 +25,7 @@ MmseBasedNpe::MmseBasedNpe(int size, float* __restrict noiseProfile) {
 
   PH1mean = makeVector(fftsize, (double)0.5);
   noisePow = new float[fftsize];
-  memcpy(noisePow, noiseProfile, sizeof(double) * fftsize);
+  memcpy(noisePow, noiseProfile, sizeof(float) * fftsize);
   noisyPer = new float[fftsize];
   snrPost1 = new double[fftsize];
   estimate = new double[fftsize];
@@ -72,7 +69,7 @@ void MmseBasedNpe::process(float* __restrict amp) {
   }
 }
 
-void MmseBasedNpe::updateNoiseProfile(float* __restrict noise){
+void MmseBasedNpe::updateNoiseProfile(float* noise){
   memcpy(noise, noisePow, sizeof(float) * fftsize);
 }
 
