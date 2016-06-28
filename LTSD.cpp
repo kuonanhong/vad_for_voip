@@ -13,7 +13,8 @@
   #define LOGE(...) ((void)__android_log_print(ANDROID_LOG_VERBOSE, "vaddsp-jni", __VA_ARGS__))
 #endif
 
-LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double lambda0, double lambda1){
+LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double lambda0, double lambda1,
+           double k0, double k1, double k2){
   windowsize = winsize;
   analysissize = winsize * 4;
   fftsize = analysissize / 2 + 1;
@@ -22,10 +23,12 @@ LTSD::LTSD(int winsize, int samprate, int order, double e0, double e1, double la
   m_order = order;
   m_e0 = e0;
   m_e1 = e1;
-  fft_errors = 0;
   m_lambda0 = lambda0;
   m_lambda1 = lambda1;
-
+  m_k0 = k0;
+  m_k1 = k1;
+  m_k2 = k2;
+  fft_errors = 0;
   vad_history_size = 1;
 
   vad_histories = new bool[vad_history_size];
@@ -151,20 +154,21 @@ bool LTSD::isSignal(){
   //float sn = fabs(e - e2);
   float lamb = (m_lambda0 - m_lambda1) / (m_e0 - m_e1) * e2 + m_lambda0 -
     (m_lambda0 - m_lambda1) / (1.0 - (m_e1 / m_e0));
-  //float par =0.0;
-  float k = 0.0;
+  float par = 300.0;
+  float k = 5.0;
   //float kthresh = 4.0;
-  // par = parade->process(power_spectrum, avg_pow);
+  //par = parade->process(power_spectrum, avg_pow);
   k = lpcr->process(fft_in);
   //printf("noise: %f, ltsd: %f, lambda:%f, e0:%f, lpc_k:%f\n", e2, ltsd, lamb, m_e0, k);
   //k = 5.0;
   //LOGE("signal: %f, noise: %f, ltsd: %f, lambda:%f, e0:%f, lpc_k:%f, par:%f", e, e2, ltsd, lamb, m_e0, k, par);
   //LOGE("e0: %f, e1: %f, lam0: %f, lam1:%f", m_e0, m_e1, m_lambda0, m_lambda1);
   //LOGE("pow: %f, lpc_k:%f, par:%f", e, k, par);
+  //LOGE("noise: %f, ltsd: %f, lambda:%f, e0:%f, lpc_k:%f, par:%f", e2, ltsd, lamb, m_e0, k, par);
   if (e2 < m_e0){
     // 静音環境
     if(ltsd > m_lambda0){
-      if (k < 4){
+      if (k < m_k0 || par < 200){
         return false;
       }else {
         return true;
@@ -175,7 +179,7 @@ bool LTSD::isSignal(){
   }else if (e2 > m_e1){
     // 高ノイズ環境
     if(ltsd > m_lambda1){
-      if (k < 4){
+      if (k < m_k2 || par < 200){
         return false;
       }else{
         return true;
@@ -186,7 +190,7 @@ bool LTSD::isSignal(){
   }else {
     // 中間
     if (ltsd > lamb) {
-      if (k < 4){
+      if (k < m_k1 || par < 200){
         return false;
       }else {
         return true;
@@ -295,7 +299,7 @@ bool LTSD::vadDecision(){
   return true;
 }
 
-void LTSD::updateParams(double e0, double e1, double lambda0, double lambda1){
+void LTSD::updateParams(double e0, double e1, double lambda0, double lambda1, double k0, double k1, double k2){
   m_e0 = e0;
   m_e1 = e1;
   m_lambda0 = lambda0;
