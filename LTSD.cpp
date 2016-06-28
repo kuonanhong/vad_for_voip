@@ -159,12 +159,13 @@ bool LTSD::isSignal(){
   //float kthresh = 4.0;
   //par = parade->process(power_spectrum, avg_pow);
   k = lpcr->process(fft_in);
-  //printf("noise: %f, ltsd: %f, lambda:%f, e0:%f, lpc_k:%f\n", e2, ltsd, lamb, m_e0, k);
-  //k = 5.0;
-  //LOGE("signal: %f, noise: %f, ltsd: %f, lambda:%f, e0:%f, lpc_k:%f, par:%f", e, e2, ltsd, lamb, m_e0, k, par);
-  //LOGE("e0: %f, e1: %f, lam0: %f, lam1:%f", m_e0, m_e1, m_lambda0, m_lambda1);
-  //LOGE("pow: %f, lpc_k:%f, par:%f", e, k, par);
-  //LOGE("noise: %f, ltsd: %f, lambda:%f, e0:%f, lpc_k:%f, par:%f", e2, ltsd, lamb, m_e0, k, par);
+#ifdef DEBUG
+#ifdef __ANDROID__
+  LOGE("noise: %f, ltsd: %f, lambda:%f, e0:%f, lpc_k:%f, par:%f", e2, ltsd, lamb, m_e0, k, par);
+#else
+  printf("noise: %f, ltsd: %f, lambda:%f, e0:%f, lpc_k:%f, par:%f\n", e2, ltsd, lamb, m_e0, k, par);
+#endif
+#endif
   if (e2 < m_e0){
     // 静音環境
     if(ltsd > m_lambda0){
