@@ -154,10 +154,10 @@ bool LTSD::isSignal(){
   //float sn = fabs(e - e2);
   float lamb = (m_lambda0 - m_lambda1) / (m_e0 - m_e1) * e2 + m_lambda0 -
     (m_lambda0 - m_lambda1) / (1.0 - (m_e1 / m_e0));
-  float par = 300.0;
+  float par = 1.0;
   float k = 5.0;
   //float kthresh = 4.0;
-  //par = parade->process(power_spectrum, avg_pow);
+  par = parade->process(power_spectrum, avg_pow);
   k = lpcr->process(fft_in);
 #ifdef DEBUG
 #ifdef __ANDROID__
@@ -169,7 +169,7 @@ bool LTSD::isSignal(){
   if (e2 < m_e0){
     // 静音環境
     if(ltsd > m_lambda0){
-      if (k < m_k0 || par < 200){
+      if (k < m_k0 || par > 0.0){
         return false;
       }else {
         return true;
@@ -180,7 +180,7 @@ bool LTSD::isSignal(){
   }else if (e2 > m_e1){
     // 高ノイズ環境
     if(ltsd > m_lambda1){
-      if (k < m_k2 || par < 200){
+      if (k < m_k2 || par > 0.0){
         return false;
       }else{
         return true;
@@ -191,7 +191,7 @@ bool LTSD::isSignal(){
   }else {
     // 中間
     if (ltsd > lamb) {
-      if (k < m_k1 || par < 200){
+      if (k < m_k1 || par > 0.0){
         return false;
       }else {
         return true;

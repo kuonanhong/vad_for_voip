@@ -16,13 +16,13 @@
 double calc_nullhypotes(double pp, double pa, double alpha){
 
   return (1.0 / (std::sqrt(M_PI * 2.0) * alpha * pa)) *
-    std::exp( (-1.0 / (2 * std::pow(alpha, 2))) * std::pow((pp / pa), 2));
+    std::exp( (-1.0 / (2 * std::pow(alpha, 2))) * std::pow((pp / pa), 2)) + 0.0000000001;
 }
 
 double calc_hypotes(double pp, double pa, double beta){
 
   return (1.0 / (std::sqrt(M_PI * 2.0) * beta * pp)) *
-    std::exp( (-1.0 / (2 * std::pow(beta, 2))) * std::pow((pa / pp), 2));
+    std::exp( (-1.0 / (2 * std::pow(beta, 2))) * std::pow((pa / pp), 2)) + 0.0000000001;
 }
 
 PARADE::PARADE(int windowsize, int asize, float* __restrict window) {
@@ -46,7 +46,7 @@ PARADE::~PARADE() {
 
 
 double PARADE::process(float* __restrict power, float avg_pow){
-  double smax = -FLT_MAX;
+  double smax = -DBL_MAX;
   int lenmax = 0;
   int c = 0;
   float s = 0.0;
@@ -67,15 +67,16 @@ double PARADE::process(float* __restrict power, float avg_pow){
   }
   double pp = (smax / (1.0 - eta * lenmax)) * eta;
   if (pp < 0){
-    pp = 0.001;
+    pp = 0.00001;
   }
   double pa = avg_pow - pp;
 
   if (pa < 0){
-    pa = 0.001;
+    pa = 0.00001;
   }
 
   double ll = std::log(calc_hypotes(pa, pp, 1.0)) - std::log(calc_nullhypotes(pa, pp, 1.0));
+  //printf("hyp: %f, nhyp: %f\n", std::log(calc_hypotes(pa, pp, 1.0)), std::log(calc_nullhypotes(pa, pp, 1.0)));
   //LOGE("pp:%f, pa:%f, ratio:%f, ll:%f", pp, pa, pp/pa, ll);
   //float score = pp/pa;
   double ret = last_score * 0.5 + ll * 0.5;
