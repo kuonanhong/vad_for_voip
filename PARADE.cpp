@@ -13,13 +13,13 @@
 //#include <android/log.h>
 //#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_VERBOSE, "vaddsp-jni", __VA_ARGS__))
 
-float calc_nullhypotes(float pp, float pa, float alpha){
+double calc_nullhypotes(double pp, double pa, double alpha){
 
   return (1.0 / (std::sqrt(M_PI * 2.0) * alpha * pa)) *
     std::exp( (-1.0 / (2 * std::pow(alpha, 2))) * std::pow((pp / pa), 2));
 }
 
-float calc_hypotes(float pp, float pa, float beta){
+double calc_hypotes(double pp, double pa, double beta){
 
   return (1.0 / (std::sqrt(M_PI * 2.0) * beta * pp)) *
     std::exp( (-1.0 / (2 * std::pow(beta, 2))) * std::pow((pa / pp), 2));
@@ -45,15 +45,16 @@ PARADE::~PARADE() {
 }
 
 
-float PARADE::process(float* __restrict power, float avg_pow){
+double PARADE::process(float* __restrict power, float avg_pow){
   double smax = -FLT_MAX;
   int lenmax = 0;
   int c = 0;
   float s = 0.0;
-  for(int i = 5; i < 300; i++){
+  for(int i = 5; i < 50; i++){
     // searching f0 index in freqbin with maximizing estimated power of periodic component
     c = 0;
-    for (int j = i; j < fftsize; j += i + 1){
+    s = 0;
+    for (int j = i; j < fftsize; j += i){
       s += power[j];
       c++;
     }
@@ -64,21 +65,21 @@ float PARADE::process(float* __restrict power, float avg_pow){
       lenmax = c;
     }
   }
-  float pp = (smax / (1.0 - eta * lenmax)) * eta;
+  double pp = (smax / (1.0 - eta * lenmax)) * eta;
   if (pp < 0){
     pp = 0.001;
   }
-  float pa = avg_pow - pp;
+  double pa = avg_pow - pp;
 
   if (pa < 0){
     pa = 0.001;
   }
 
-  //float ll = std::log(calc_hypotes(pa, pp, 1.0)) - std::log(calc_nullhypotes(pa, pp, 1.0));
+  double ll = std::log(calc_hypotes(pa, pp, 1.0)) - std::log(calc_nullhypotes(pa, pp, 1.0));
   //LOGE("pp:%f, pa:%f, ratio:%f, ll:%f", pp, pa, pp/pa, ll);
-  float score = pp/pa;
-  float ret = last_score * 0.5 + score * 0.5;
-  last_score = score;
+  //float score = pp/pa;
+  double ret = last_score * 0.5 + ll * 0.5;
+  last_score = ret;
   //LOGE("pp:%f, pa:%f, ratio:%f, ret:%f", pp, pa, pp/pa, ret);
   return ret;
 }

@@ -12,14 +12,14 @@ class PARADE {
  public:
   PARADE(int winsize, int asize, float *window);
   virtual ~PARADE();
-  float process(float *power, float avg_pow);
+  double process(float *power, float avg_pow);
 
  private:
-  float eta;
+  double eta;
   int analysissize;
   int winsize;
   int fftsize;
-  float last_score;
+  double last_score;
 };
 
 #endif /* PARADE_H_ */
