@@ -304,7 +304,10 @@ void LTSD::updateParams(double e0, double e1, double lambda0, double lambda1, do
   m_e0 = e0;
   m_e1 = e1;
   m_lambda0 = lambda0;
-  m_lambda1 = lambda1; 
+  m_lambda1 = lambda1;
+  m_k0 = k0;
+  m_k1 = k1;
+  m_k2 = k2;
 }
 
 int LTSD::fftErrors() {

@@ -67,12 +67,12 @@ double PARADE::process(float* __restrict power, float avg_pow){
   }
   double pp = (smax / (1.0 - eta * lenmax)) * eta;
   if (pp < 0){
-    pp = 0.00001;
+    pp = 0.0000001;
   }
   double pa = avg_pow - pp;
 
   if (pa < 0){
-    pa = 0.00001;
+    pa = 0.0000001;
   }
 
   double ll = std::log(calc_hypotes(pa, pp, 1.0)) - std::log(calc_nullhypotes(pa, pp, 1.0));
