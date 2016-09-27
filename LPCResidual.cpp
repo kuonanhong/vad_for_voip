@@ -13,6 +13,7 @@ LPCResidual::LPCResidual(int windowsize, int lpcorder) {
   // TODO Auto-generated constructor stub
   winsize = windowsize;
   order = lpcorder;
+  error = false;
   R = new float[order + 1];
   K = new float[order + 1];
   A = new float[order + 1];
@@ -35,18 +36,22 @@ LPCResidual::~LPCResidual() {
 }
 
 
-float LPCResidual::process(float* __restrict windowed){
+float LPCResidual::process(const float* __restrict windowed){
   //wAutocorrelate(float *x, unsigned int L, float *R, unsigned int P, float lambda){
   wAutocorrelate(windowed, winsize, R, order, 0.0);
   LevinsonRecursion(order, R, A, K);
   calcResiduals(windowed);
   float k = calcKurtosis();
-
+  if (std::isnan(k) || std::isinf(k)){
+    error = true;
+    return last_k;
+  }
   last_k = last_k * 0.7 + k * 0.3;
+  error = false;
   return last_k;
 }
 
-void LPCResidual::calcResiduals(float* __restrict windowed){
+void LPCResidual::calcResiduals(const float* __restrict windowed){
   float predict = 0.0;
   for (int i = order; i < winsize; i++){
     predict = 0.0;
@@ -79,4 +84,9 @@ float LPCResidual::calcKurtosis(){
   }
   float k = ((ressize * (ressize + 1.0)) / ((ressize - 1.0) * (ressize - 2.0) * (ressize - 3.0))) * k4;
   return k - 3.0 * (std::pow((float(ressize - 1.0)), 2)) / ((ressize - 2.0) * (ressize - 3.0));
+}
+
+
+bool LPCResidual::hasError() {
+  return error;
 }

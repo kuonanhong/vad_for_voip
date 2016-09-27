@@ -25,8 +25,9 @@ double calc_hypotes(double pp, double pa, double beta){
     std::exp( (-1.0 / (2 * std::pow(beta, 2))) * std::pow((pa / pp), 2)) + 0.0000000001;
 }
 
-PARADE::PARADE(int windowsize, int asize, float* __restrict window) {
+PARADE::PARADE(int windowsize, int asize, const float* __restrict window) {
   // TODO Auto-generated constructor stub
+  error = false;
   analysissize = asize;
   winsize = windowsize;
   fftsize = analysissize / 2 + 1;
@@ -45,7 +46,7 @@ PARADE::~PARADE() {
 }
 
 
-double PARADE::process(float* __restrict power, float avg_pow){
+double PARADE::process(const float* __restrict power, float avg_pow){
   double smax = -DBL_MAX;
   int lenmax = 0;
   int c = 0;
@@ -79,8 +80,20 @@ double PARADE::process(float* __restrict power, float avg_pow){
   //printf("hyp: %f, nhyp: %f\n", std::log(calc_hypotes(pa, pp, 1.0)), std::log(calc_nullhypotes(pa, pp, 1.0)));
   //LOGE("pp:%f, pa:%f, ratio:%f, ll:%f", pp, pa, pp/pa, ll);
   //float score = pp/pa;
+
+  if (std::isnan(ll) || std::isinf(ll)){
+    error = true;
+    return last_score;
+  }
+
+  
   double ret = last_score * 0.5 + ll * 0.5;
   last_score = ret;
   //LOGE("pp:%f, pa:%f, ratio:%f, ret:%f", pp, pa, pp/pa, ret);
+  error = false;
   return ret;
+}
+
+bool PARADE::hasError() {
+  return error;
 }

@@ -89,7 +89,7 @@ LTSD::~LTSD() {
   }
 }
 
-bool LTSD::process(char *input){
+bool LTSD::process(const char *input){
   short* signal = (short *)input;
   for(int i=0; i<windowsize; i++){
     fft_in[i]=(float(signal[i]) / 32767.0) * window[i];
@@ -158,7 +158,14 @@ bool LTSD::isSignal(){
   float k = 5.0;
   //float kthresh = 4.0;
   par = parade->process(power_spectrum, avg_pow);
+  if(parade->hasError()){
+    fft_errors += 100;
+  }
   k = lpcr->process(fft_in);
+  if(lpcr->hasError()){
+    fft_errors += 100;
+  }
+  
 #ifdef DEBUG
 #ifdef __ANDROID__
   LOGE("noise: %f, ltsd: %f, lambda:%f, e0:%f, lpc_k:%f, par:%f", e2, ltsd, lamb, m_e0, k, par);

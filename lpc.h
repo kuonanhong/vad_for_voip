@@ -5,7 +5,7 @@
 
 //find the order-P autocorrelation array, R, for the sequence x of length L and warping of lambda
 //wAutocorrelate(&pfSrc[stIndex],siglen,R,P,0);
-void wAutocorrelate(float* __restrict x, unsigned int L, float* __restrict R, unsigned int P, float lambda){
+void wAutocorrelate(const float* __restrict x, unsigned int L, float* __restrict R, unsigned int P, float lambda){
   double *dl = new double [L];
   double *Rt = new double [L];
   double r1,r2,r1t;

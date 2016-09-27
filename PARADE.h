@@ -10,12 +10,14 @@
 
 class PARADE {
  public:
-  PARADE(int winsize, int asize, float *window);
+  PARADE(int winsize, int asize, const float *window);
   virtual ~PARADE();
-  double process(float *power, float avg_pow);
+  double process(const float *power, float avg_pow);
+  bool hasError();
 
  private:
   double eta;
+  bool error;
   int analysissize;
   int winsize;
   int fftsize;
